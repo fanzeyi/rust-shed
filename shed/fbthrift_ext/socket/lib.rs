@@ -7,8 +7,6 @@
  * of this source tree.
  */
 
-#![cfg(not(target_os = "windows"))]
-
 use anyhow::{Error, Result};
 use bytes::{Bytes, BytesMut};
 use fbthrift::{Framing, FramingDecoded, FramingEncodedFinal, Transport};
@@ -19,11 +17,13 @@ use std::future::Future;
 use std::io::Cursor;
 use std::pin::Pin;
 use std::sync::Arc;
-use tokio::net::UnixStream;
 use tokio::sync::Mutex;
 use tokio_tower::pipeline::client::Client;
 use tokio_util::codec::{Decoder, Framed};
 use tower_service::Service;
+
+mod compat;
+use crate::compat::UnixStream;
 
 /// ```ignore
 /// let stream = tokio::net::UnixStream::connect(path)?;
